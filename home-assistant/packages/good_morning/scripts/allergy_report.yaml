@@ -1,0 +1,31 @@
+morning_allergy_report:
+  alias: Morning - Allergy Report
+  mode: single
+  icon: mdi:flower-pollen
+  sequence:
+    - variables:
+        allergy_raw: "{{ states('sensor.allergy_index_today') }}"
+        allergy_value: "{{ allergy_raw | float(none) }}"
+        allergy_rating: |-
+          {% if allergy_value is none %}
+            unknown
+          {% elif allergy_value < 2.5 %}
+            low
+          {% elif allergy_value < 4.9 %}
+            low to medium
+          {% elif allergy_value < 7.3 %}
+            medium
+          {% elif allergy_value < 9.7 %}
+            medium to high
+          {% else %}
+            high
+          {% endif %}
+        allergy_message: |-
+          {% if allergy_value is none %}
+            I could not get today's allergy index.
+          {% else %}
+            Today's allergy index level is {{ allergy_rating }}.
+          {% endif %}
+    - action: script.good_morning_speak
+      data:
+        message: "{{ allergy_message }}"

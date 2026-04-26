@@ -1,0 +1,84 @@
+morning_air_quality_report:
+  alias: Morning - Air Quality Report
+  mode: single
+  icon: mdi:air-filter
+  sequence:
+    - variables:
+        aqi_value: "{{ states('sensor.airnow_air_quality_index') | int(-1) }}"
+        pm10_value: "{{ states('sensor.airnow_pm10') | int(-1) }}"
+        pm25_value: "{{ states('sensor.airnow_pm2_5') | int(-1) }}"
+        ozone_value: "{{ states('sensor.airnow_ozone') | int(-1) }}"
+        max_pollutant_value: >-
+          {{ [pm10_value | int(-1), pm25_value | int(-1), ozone_value | int(-1)] |
+          max }}
+        dominant_pollutant: >-
+          {% set pm10 = pm10_value | int(-1) %} {% set pm25 = pm25_value | int(-1)
+          %} {% set ozone = ozone_value | int(-1) %} {% set max_value = [pm10,
+          pm25, ozone] | max %} {% if max_value < 0 %}
+            unknown
+          {% elif pm10 == max_value and pm25 == max_value and ozone == max_value
+          %}
+            a mix of coarse particles, fine particles, and ozone
+          {% elif pm10 == max_value and pm25 == max_value %}
+            a mix of coarse and fine particles
+          {% elif pm10 == max_value and ozone == max_value %}
+            a mix of coarse particles and ozone
+          {% elif pm25 == max_value and ozone == max_value %}
+            a mix of fine particles and ozone
+          {% elif pm10 == max_value %}
+            coarse particles, P M ten
+          {% elif pm25 == max_value %}
+            fine particles, P M two point five
+          {% elif ozone == max_value %}
+            ozone
+          {% else %}
+            unknown
+          {% endif %}
+        aqi_rating: |-
+          {% set aqi = aqi_value | int(-1) %} {% if aqi < 0 %}
+            unknown
+          {% elif aqi <= 50 %}
+            good
+          {% elif aqi <= 100 %}
+            moderate
+          {% elif aqi <= 150 %}
+            unhealthy for sensitive groups
+          {% elif aqi <= 200 %}
+            unhealthy
+          {% elif aqi <= 300 %}
+            very unhealthy
+          {% else %}
+            hazardous
+          {% endif %}
+        health_note: >-
+          {% set aqi = aqi_value | int(-1) %} {% if aqi < 0 %} {% elif aqi <= 50
+          %} {% elif aqi <= 100 %}
+            Air quality is acceptable for most people.
+          {% elif aqi <= 150 %}
+            People sensitive to air pollution should consider reducing prolonged outdoor exertion.
+          {% elif aqi <= 200 %}
+            Outdoor air quality is poor today.
+          {% elif aqi <= 300 %}
+            You should limit outdoor exertion today.
+          {% else %}
+            You should avoid outdoor exertion today.
+          {% endif %}
+        contributor_note: >-
+          {% set aqi = aqi_value | int(-1) %} {% set max_value =
+          max_pollutant_value | int(-1) %} {% set pollutant = dominant_pollutant |
+          trim %} {% if aqi < 0 or max_value < 0 or pollutant == 'unknown' %} {%
+          elif aqi <= 50 %}
+            The main contributor is {{ pollutant }}, but all measured pollutant levels are in the good range.
+          {% else %}
+            The main contributor appears to be {{ pollutant }}, with an index of {{ max_value }}.
+          {% endif %}
+        air_quality_message: |-
+          {% set aqi = aqi_value | int(-1) %} {% if aqi < 0 %}
+            I could not get the current outdoor air quality report.
+          {% else %}
+            The current outdoor air quality index is {{ aqi }}, which is {{ aqi_rating | trim }}.
+            {{ health_note | trim }}
+          {% endif %}
+    - action: script.good_morning_speak
+      data:
+        message: "{{ air_quality_message }}"

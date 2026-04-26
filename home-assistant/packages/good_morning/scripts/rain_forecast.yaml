@@ -1,0 +1,58 @@
+morning_rain_forecast:
+  alias: Morning - Rain Forecast
+  mode: single
+  icon: mdi:weather-rainy
+  sequence:
+    - variables:
+        weather_entity: weather.pirateweather
+    - action: weather.get_forecasts
+      target:
+        entity_id: "{{ weather_entity }}"
+      data:
+        type: daily
+      response_variable: daily_forecast
+    - variables:
+        rain_message: >-
+          {% set forecasts = daily_forecast.get(weather_entity,
+          {}).get('forecast', []) %} {% set precip_unit =
+          state_attr(weather_entity, 'precipitation_unit') | default('', true) %}
+          {% set spoken_precip_unit =
+            'inches' if precip_unit in ['in', 'inch', 'inches']
+            else 'millimeters' if precip_unit == 'mm'
+            else precip_unit
+          %}
+
+          {% if forecasts | count == 0 %}
+            I could not get today's rain forecast.
+          {% else %}
+            {% set f = forecasts[0] %}
+            {% set pop = f.precipitation_probability | default(none) %}
+            {% set precip = f.precipitation | default(none) %}
+            {% set condition = f.condition | default('', true) %}
+
+            {% if pop is none %}
+              I got today's weather forecast, but this weather provider did not include a rain probability.
+            {% else %}
+              {% set pop_value = pop | int(0) %}
+
+              {% if pop_value <= 10 %}
+                Rain is unlikely today. The chance of precipitation is {{ pop_value }} percent.
+              {% elif pop_value <= 30 %}
+                There is a slight chance of rain today. The chance of precipitation is {{ pop_value }} percent.
+              {% elif pop_value <= 50 %}
+                There is a chance of rain today. The chance of precipitation is {{ pop_value }} percent.
+              {% elif pop_value <= 70 %}
+                Rain is likely today. The chance of precipitation is {{ pop_value }} percent.
+              {% else %}
+                Rain is very likely today. The chance of precipitation is {{ pop_value }} percent.
+              {% endif %}
+
+              {% if precip is not none and (precip | float(0)) > 0 %}
+                The forecast calls for about {{ precip | float(0) | round(2) }} {{ spoken_precip_unit }} of precipitation.
+              {% endif %}
+            {% endif %}
+          {% endif %}
+    - action: script.good_morning_speak
+      data:
+        message: "{{ rain_message }}"
+  description: ""

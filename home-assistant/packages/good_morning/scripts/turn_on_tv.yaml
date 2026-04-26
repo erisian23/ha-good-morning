@@ -1,0 +1,27 @@
+morning_turn_on_tv:
+  alias: Morning - Turn On TV
+  mode: single
+  description: ""
+  sequence:
+    - action: remote.turn_on
+      metadata: {}
+      target:
+        entity_id: remote.onn_4k_plus
+      data: {}
+    - delay:
+        hours: 0
+        minutes: 0
+        seconds: 1
+        milliseconds: 0
+    - action: media_player.volume_set
+      metadata: {}
+      data:
+        volume_level: 0.2
+      target:
+        entity_id: media_player.living_room_tv
+    - action: androidtv.adb_command
+      metadata: {}
+      target:
+        device_id: ed0cafb7d9ed1ad082e5aa1dd3385d79
+      data:
+        command: am start -n com.wbd.stream/com.wbd.beam.BeamActivity

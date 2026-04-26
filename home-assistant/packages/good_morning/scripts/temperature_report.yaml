@@ -1,0 +1,56 @@
+morning_temperature_report:
+  alias: Morning - Temperature Report
+  mode: single
+  icon: mdi:thermometer
+  sequence:
+    - variables:
+        weather_entity: weather.pirateweather
+    - action: weather.get_forecasts
+      target:
+        entity_id: "{{ weather_entity }}"
+      data:
+        type: daily
+      response_variable: daily_forecast
+    - variables:
+        current_temp: "{{ state_attr(weather_entity, 'temperature') | float(none) }}"
+        apparent_temp: "{{ state_attr(weather_entity, 'apparent_temperature') | float(none) }}"
+        temp_unit: >-
+          {{ state_attr(weather_entity, 'temperature_unit') | default('°F', true)
+          }}
+        forecasts: "{{ daily_forecast.get(weather_entity, {}).get('forecast', []) }}"
+        today: "{{ forecasts[0] if forecasts | count > 0 else dict() }}"
+        high_temp: "{{ today.temperature | default(none) | float(none) }}"
+        low_temp: "{{ today.templow | default(none) | float(none) }}"
+        unit_spoken: |-
+          {% if temp_unit in ['°F', 'F'] %}
+            degrees
+          {% elif temp_unit in ['°C', 'C'] %}
+            degrees Celsius
+          {% else %}
+            {{ temp_unit }}
+          {% endif %}
+        feels_like_sentence: >-
+          {% if current_temp is none or apparent_temp is none %} {% elif
+          (apparent_temp - current_temp) | abs < 2 %} {% else %}
+            It feels like {{ apparent_temp | round(0) }} {{ unit_spoken | trim }}.
+          {% endif %}
+        forecast_sentence: |-
+          {% if high_temp is not none and low_temp is not none %}
+            Today's forecast high is {{ high_temp | round(0) }} {{ unit_spoken | trim }}, with a low of {{ low_temp | round(0) }}.
+          {% elif high_temp is not none %}
+            Today's forecast high is {{ high_temp | round(0) }} {{ unit_spoken | trim }}.
+          {% elif low_temp is not none %}
+            Today's forecast low is {{ low_temp | round(0) }} {{ unit_spoken | trim }}.
+          {% endif %}
+        temperature_message: |-
+          {% if current_temp is none %}
+            I could not get the current temperature.
+          {% else %}
+            It is currently {{ current_temp | round(0) }} {{ unit_spoken | trim }} outside.
+            {{ feels_like_sentence | trim }}
+            {{ forecast_sentence | trim }}
+          {% endif %}
+    - action: script.good_morning_speak
+      data:
+        message: "{{ temperature_message }}"
+  description: ""

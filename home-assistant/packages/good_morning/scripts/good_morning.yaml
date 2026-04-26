@@ -1,0 +1,13 @@
+good_morning:
+  alias: Good morning
+  mode: single
+  sequence:
+    - action: script.set_everywhere_to_volume_5
+    - action: script.morning_current_time
+    - action: script.morning_allergy_report
+    - action: script.morning_air_quality_report
+    - action: script.morning_rain_forecast
+    - action: script.morning_temperature_report
+    - action: script.morning_current_date
+    - action: script.morning_turn_on_tv
+      data: {}
