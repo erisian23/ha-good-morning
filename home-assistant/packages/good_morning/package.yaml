@@ -1,14 +1,31 @@
 # Good Morning package
 #
-# Depends on:
-# - input_select.good_morning_tts_target
-# - notify.alexa_media
-# - notify.alexa_media_last_called
+# Required external integrations:
+# - Alexa Media Player, for notify.alexa_media and notify.alexa_media_last_called
+# - Pirate Weather, for weather.pirateweather
+# - AirNow, for Air Quality Index sensors
+# - IQVIA, for allergy index sensor
+#
+# Required external entities:
 # - weather.pirateweather
 # - sensor.allergy_index_today
 # - sensor.airnow_air_quality_index
 # - sensor.airnow_pm10
 # - sensor.airnow_pm2_5
 # - sensor.airnow_ozone
+# - script.set_everywhere_to_volume_5
+#
+# Package-owned helper:
+# - input_select.good_morning_tts_target
+
+input_select:
+  good_morning_tts_target:
+    name: Good Morning TTS Target
+    icon: mdi:speaker
+    options:
+      - media_player.desk_echo_pop
+      - media_player.bedroom_echo_dot
+      - last_called
+    initial: media_player.desk_echo_pop
 
 script: !include_dir_merge_named scripts
