@@ -1,3 +1,0 @@
-scp -P 2222 -r \
-  /Users/mfisher/src/GitHub/ha-good-morning/home-assistant/packages/good_morning \
-  root@haos-vm.home.erisian23.com:/config/packages/
