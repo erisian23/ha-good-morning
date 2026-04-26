@@ -1,0 +1,28 @@
+morning_current_time:
+  alias: Morning - Current Time
+  mode: single
+  icon: mdi:clock-outline
+  sequence:
+    - variables:
+        hour: "{{ now().strftime('%I') | int }}"
+        minute: "{{ now().strftime('%M') | int }}"
+        am_pm: >-
+          {% if now().hour < 12 %}
+            A M
+          {% else %}
+            P M
+          {% endif %}
+        minute_spoken: >-
+          {% if minute == 0 %}
+            o'clock
+          {% elif minute < 10 %}
+            oh {{ minute }}
+          {% else %}
+            {{ minute }}
+          {% endif %}
+        time_message: >-
+          Good morning. It is {{ hour }} {{ minute_spoken | trim }} {{ am_pm | trim }}.
+
+    - action: script.good_morning_speak
+      data:
+        message: "{{ time_message }}"

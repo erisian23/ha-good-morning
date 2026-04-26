@@ -1,0 +1,14 @@
+# Good Morning package
+#
+# Depends on:
+# - input_select.good_morning_tts_target
+# - notify.alexa_media
+# - notify.alexa_media_last_called
+# - weather.pirateweather
+# - sensor.allergy_index_today
+# - sensor.airnow_air_quality_index
+# - sensor.airnow_pm10
+# - sensor.airnow_pm2_5
+# - sensor.airnow_ozone
+
+script: !include_dir_merge_named scripts

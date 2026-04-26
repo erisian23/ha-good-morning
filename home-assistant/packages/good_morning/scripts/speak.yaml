@@ -1,0 +1,58 @@
+good_morning_speak:
+  alias: Good Morning - Speak
+  mode: queued
+  icon: mdi:speaker-message
+  fields:
+    message:
+      description: Text to speak during the Good Morning routine.
+      example: The current air quality index is 42, which is good.
+    target:
+      description: >-
+        Optional media player override. If omitted, uses
+        input_select.good_morning_tts_target. Use last_called to speak on the
+        Alexa Media Player last-called device.
+      example: media_player.desk_echo_pop
+  sequence:
+    - variables:
+        speech_message: "{{ message | default('', true) | trim }}"
+        speech_target: >-
+          {% set override = target | default('', true) | trim %}
+          {% if override != '' %}
+            {{ override }}
+          {% else %}
+            {{ states('input_select.good_morning_tts_target') }}
+          {% endif %}
+
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ speech_message == '' }}"
+          sequence:
+            - stop: Good Morning - Speak was called without a message.
+              error: true
+
+        - conditions:
+            - condition: template
+              value_template: "{{ speech_target in ['unknown', 'unavailable', 'none', ''] }}"
+          sequence:
+            - stop: Good Morning - Speak does not have a valid media player target.
+              error: true
+
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ speech_target == 'last_called' }}"
+          sequence:
+            - action: notify.alexa_media_last_called
+              data:
+                message: "{{ speech_message }}"
+                data:
+                  type: tts
+      default:
+        - action: notify.alexa_media
+          data:
+            target:
+              - "{{ speech_target }}"
+            message: "{{ speech_message }}"
+            data:
+              type: tts

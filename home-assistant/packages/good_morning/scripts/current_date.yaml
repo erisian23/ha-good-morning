@@ -1,0 +1,20 @@
+morning_current_date:
+  alias: Morning - Current Date
+  mode: single
+  icon: mdi:calendar-today
+  sequence:
+    - variables:
+        date_message: >-
+          {% set d = now().day %}
+          {% set suffix =
+            'th' if 11 <= (d % 100) <= 13
+            else 'st' if d % 10 == 1
+            else 'nd' if d % 10 == 2
+            else 'rd' if d % 10 == 3
+            else 'th'
+          %}
+          Today is {{ now().strftime('%A') }}, {{ now().strftime('%B') }} {{ d }}{{ suffix }}, {{ now().year }}.
+
+    - action: script.good_morning_speak
+      data:
+        message: "{{ date_message }}"
