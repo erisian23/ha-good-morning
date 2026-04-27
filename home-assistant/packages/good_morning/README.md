@@ -2,8 +2,7 @@
 
 Technical reference for the Good Morning Home Assistant package.
 
-For the high-level project overview, see the
-[root README](../../../README.md).
+For the high-level project overview, see the [root README](../../../README.md).
 
 ## Directory Layout
 
@@ -25,8 +24,7 @@ good_morning/
     `-- turn_on_tv.yaml
 ```
 
-`package.yaml` owns package-level configuration. Each script lives in its own
-file under `scripts/` so changes stay small and reviewable.
+`package.yaml` owns package-level configuration. Each script lives in its own file under `scripts/` so changes stay small and reviewable.
 
 ## Package Entrypoint
 
@@ -46,8 +44,7 @@ input_select:
 script: !include_dir_merge_named scripts
 ```
 
-Because `script` uses `!include_dir_merge_named`, files under `scripts/` must
-start directly with the script entity ID.
+Because `script` uses `!include_dir_merge_named`, files under `scripts/` must start directly with the script entity ID.
 
 Correct:
 
@@ -100,10 +97,9 @@ script.morning_temperature_report
 script.morning_turn_on_tv
 ```
 
-If you previously created `input_select.good_morning_tts_target` through the
-Home Assistant UI, delete the UI-created helper before enabling this
-YAML-managed helper. Defining the same helper twice can create conflicts or
-duplicate entity IDs.
+If you previously created `input_select.good_morning_tts_target` through the Home Assistant UI,
+delete the UI-created helper before enabling this YAML-managed helper.
+Defining the same helper twice can create conflicts or duplicate entity IDs.
 
 ## External Dependencies
 
@@ -116,21 +112,18 @@ notify.alexa_media
 notify.alexa_media_last_called
 ```
 
-The package also expects real media player targets in
-`input_select.good_morning_tts_target`, currently:
+The package also expects real media player targets in `input_select.good_morning_tts_target`, currently:
 
 ```text
 media_player.desk_echo_pop
 media_player.bedroom_echo_dot
 ```
 
-`last_called` is a special helper option. It sends speech through
-`notify.alexa_media_last_called` instead of treating that notify service as a
-media player entity.
+`last_called` is a special helper option.
+It sends speech through `notify.alexa_media_last_called` instead of treating that notify service as a media player entity.
 
-If you do not use Alexa Media Player, replace `script.good_morning_speak` with
-your preferred TTS transport. The report scripts call the wrapper instead of
-calling Alexa directly.
+If you do not use Alexa Media Player, replace `script.good_morning_speak` with your preferred TTS transport.
+The report scripts call the wrapper instead of calling Alexa directly.
 
 ### Pirate Weather
 
@@ -147,9 +140,7 @@ Expected entity:
 weather.pirateweather
 ```
 
-You can replace this with another `weather.*` entity if it supports
-`weather.get_forecasts` with `type: daily` and provides the fields used by the
-scripts.
+You can replace this with another `weather.*` entity if it supports `weather.get_forecasts` with `type: daily` and provides the fields used by the scripts.
 
 ### AirNow
 
@@ -190,9 +181,9 @@ The main routine can call:
 script.set_everywhere_to_volume_5
 ```
 
-This script is not defined by this package. `script.good_morning` checks whether
-the entity exists before calling it. Create that script separately, remove the
-action, or replace it with your own speaker-volume behavior.
+This script is not defined by this package.
+`script.good_morning` checks whether the entity exists before calling it.
+Create that script separately, remove the action, or replace it with your own speaker-volume behavior.
 
 ## Script Reference
 
@@ -224,8 +215,7 @@ message
 target
 ```
 
-`message` is required. `target` is optional. If `target` is omitted, the script
-reads:
+`message` is required. `target` is optional. If `target` is omitted, the script reads:
 
 ```text
 input_select.good_morning_tts_target
@@ -244,9 +234,8 @@ Blank messages and invalid targets stop the script with an error.
 
 Smoke test for the speech wrapper.
 
-It sends a short confirmation message through `script.good_morning_speak`. Use
-this after installation or deployment to confirm the package is loaded and TTS
-delivery works.
+It sends a short confirmation message through `script.good_morning_speak`.
+Use this after installation or deployment to confirm the package is loaded and TTS delivery works.
 
 ### `script.good_morning_speak_test_all`
 
@@ -301,8 +290,7 @@ Interprets the IQVIA allergy index using these ranges:
 9.7+        High
 ```
 
-If the sensor cannot be read as a number, the script says it could not get
-today's allergy index.
+If the sensor cannot be read as a number, the script says it could not get today's allergy index.
 
 ### `script.morning_air_quality_report`
 
@@ -315,8 +303,7 @@ sensor.airnow_pm2_5
 sensor.airnow_ozone
 ```
 
-The spoken report includes the current outdoor AQI, its category, and a short
-health note when the AQI is above the good range.
+The spoken report includes the current outdoor AQI, its category, and a short health note when the AQI is above the good range.
 
 AQI interpretation:
 
@@ -329,8 +316,7 @@ AQI interpretation:
 301+        Hazardous
 ```
 
-If the overall AQI cannot be read, the script says it could not get the current
-outdoor air quality report.
+If the overall AQI cannot be read, the script says it could not get the current outdoor air quality report.
 
 ### `script.morning_rain_forecast`
 
@@ -352,13 +338,11 @@ with:
 type: daily
 ```
 
-The spoken report uses today's `precipitation_probability`. If a positive
-`precipitation` amount is available, it also reports the expected precipitation
-amount using the weather entity's precipitation unit.
+The spoken report uses today's `precipitation_probability`.
+If a positive `precipitation` amount is available, it also reports the expected precipitation amount using the weather entity's precipitation unit.
 
-If no forecast is returned, the script says it could not get today's rain
-forecast. If the provider omits precipitation probability, the script says the
-provider did not include a rain probability.
+If no forecast is returned, the script says it could not get today's rain forecast.
+If the provider omits precipitation probability, the script says the provider did not include a rain probability.
 
 ### `script.morning_temperature_report`
 
@@ -379,8 +363,7 @@ today's forecast high
 today's forecast low
 ```
 
-If current temperature is unavailable, the script says it could not get the
-current temperature.
+If current temperature is unavailable, the script says it could not get the current temperature.
 
 ### `script.morning_turn_on_tv`
 
@@ -395,8 +378,7 @@ media_player.volume_set media_player.living_room_tv to 0.2
 androidtv.adb_command to launch com.wbd.stream/com.wbd.beam.BeamActivity
 ```
 
-Customize or remove this script if those entities, device IDs, or app package
-names do not match your Home Assistant instance.
+Customize or remove this script if those entities, device IDs, or app package names do not match your Home Assistant instance.
 
 ## Installation
 
@@ -414,9 +396,8 @@ homeassistant:
     good_morning: !include packages/good_morning/package.yaml
 ```
 
-If your `configuration.yaml` already has a top-level `homeassistant:` section,
-merge the `packages:` block into the existing section. Do not create a duplicate
-`homeassistant:` key.
+If your `configuration.yaml` already has a top-level `homeassistant:` section, merge the `packages:` block into the existing section.
+Do not create a duplicate `homeassistant:` key.
 
 Then run:
 
@@ -468,9 +449,8 @@ Most users should review these before using the package as-is:
 - `script.set_everywhere_to_volume_5`
 - `script.morning_turn_on_tv`
 
-The package favors explicit Home Assistant entity IDs over a heavier abstraction
-layer. That makes the YAML easy to read, but it also means local entity names
-should be checked carefully.
+The package favors explicit Home Assistant entity IDs over a heavier abstraction layer.
+That makes the YAML easy to read, but it also means local entity names should be checked carefully.
 
 ## Validation
 
@@ -480,8 +460,7 @@ From the repository root:
 make check
 ```
 
-This verifies required package files, required script IDs, the package include,
-and incorrect nested `script:` keys under `scripts/`.
+This verifies required package files, required script IDs, the package include, and incorrect nested `script:` keys under `scripts/`.
 
 For YAML linting:
 
@@ -512,26 +491,22 @@ alias: Morning - Air Quality Report
 
 ### A duplicate helper entity appears
 
-If `input_select.good_morning_tts_target_2` appears, you probably had a
-UI-created helper with the same name or entity ID.
+If `input_select.good_morning_tts_target_2` appears, you probably had a UI-created helper with the same name or entity ID.
 
 Delete the UI helper or remove the YAML helper, then reload YAML.
 
 ### `notify.alexa_media_last_called` does not work as a target
 
-`notify.alexa_media_last_called` is not a media player target. It is a separate
-notify action.
+`notify.alexa_media_last_called` is not a media player target. It is a separate notify action.
 
-Use `last_called` as the value of `input_select.good_morning_tts_target`, or
-pass `target: last_called` to `script.good_morning_speak`.
+Use `last_called` as the value of `input_select.good_morning_tts_target`, or pass `target: last_called` to `script.good_morning_speak`.
 
 ### Weather provider does not include rain probability
 
 Not every weather integration exposes the same daily forecast fields.
 
-If the rain report says the provider did not include a rain probability, use a
-different weather entity or adjust `script.morning_rain_forecast` to match your
-provider's forecast fields.
+If the rain report says the provider did not include a rain probability, use a different weather entity or adjust `script.morning_rain_forecast`
+to match your provider's forecast fields.
 
 ## Maintenance Notes
 
@@ -544,5 +519,4 @@ report scripts generate text
 script.good_morning_speak delivers speech
 ```
 
-If you later move away from Alexa Media Player, update
-`script.good_morning_speak` instead of rewriting every report script.
+If you later move away from Alexa Media Player, update `script.good_morning_speak` instead of rewriting every report script.
