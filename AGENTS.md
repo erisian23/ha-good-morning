@@ -12,6 +12,16 @@ This repository contains Home Assistant configuration packages.
 - Avoid broad architectural changes unless requested.
 - Do not invent features, entities, files, or scripts that are not present in the repository.
 
+## Formatting Conventions
+
+- Do not impose an 80-character line limit.
+- Prefer readable, natural line lengths over legacy terminal-width wrapping.
+- Use a soft maximum line length of 160 characters for code, YAML, Markdown, shell scripts, and documentation unless a tool or file format requires something stricter.
+- Do not reflow existing prose, comments, YAML strings, or documentation solely to satisfy an 80-character convention.
+- Preserve descriptive names, labels, entity IDs, file paths, URLs, and commands even when they make lines longer.
+- Wrap long lines only when it improves readability, reduces ambiguity, or is required by syntax or tooling.
+- For Markdown prose, prefer one sentence or logical clause per line only when it improves diff readability; otherwise use normal paragraphs.
+
 ## Home Assistant Conventions
 
 - Package files live under `home-assistant/packages/`.
@@ -30,6 +40,7 @@ This repository contains Home Assistant configuration packages.
 - Use relative links between documentation files.
 - Preserve accurate file paths, entity IDs, helper names, and script names.
 - Do not claim the package supports behavior that is not implemented in the repository.
+- Do not wrap Markdown prose at 80 characters. Use natural paragraph flow unless wrapping improves clarity.
 
 ## Validation
 
