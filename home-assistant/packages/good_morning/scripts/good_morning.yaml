@@ -2,12 +2,25 @@ good_morning:
   alias: Good morning
   mode: single
   sequence:
-    - action: script.set_everywhere_to_volume_5
+    - if:
+        - condition: template
+          value_template: >-
+            {{ states('script.set_everywhere_to_volume_5') not in ['unknown', 'unavailable'] }}
+      then:
+        - action: script.set_everywhere_to_volume_5
+
     - action: script.morning_current_time
     - action: script.morning_allergy_report
     - action: script.morning_air_quality_report
     - action: script.morning_rain_forecast
     - action: script.morning_temperature_report
     - action: script.morning_current_date
-    - action: script.morning_turn_on_tv
+
+    - if:
+        - condition: template
+          value_template: >-
+            {{ states('script.morning_turn_on_tv') not in ['unknown', 'unavailable'] }}
+      then:
+        - action: script.morning_turn_on_tv
+
       data: {}

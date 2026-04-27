@@ -1,0 +1,16 @@
+good_morning_speak_test_all:
+  alias: Good Morning - Speak - Test All
+  mode: single
+  icon: mdi:test-tube
+  sequence:
+    - action: script.morning_current_time
+    - delay: "00:00:02"
+    - action: script.morning_allergy_report
+    - delay: "00:00:02"
+    - action: script.morning_air_quality_report
+    - delay: "00:00:02"
+    - action: script.morning_rain_forecast
+    - delay: "00:00:02"
+    - action: script.morning_temperature_report
+    - delay: "00:00:02"
+    - action: script.morning_current_date

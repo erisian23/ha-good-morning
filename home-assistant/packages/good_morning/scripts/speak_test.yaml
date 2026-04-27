@@ -1,0 +1,9 @@
+good_morning_speak_test:
+  alias: Good Morning - Speak - Test
+  mode: single
+  icon: mdi:test-tube
+  sequence:
+    - action: script.good_morning_speak
+      data:
+        message: >-
+          Good Morning Speak test succeeded.

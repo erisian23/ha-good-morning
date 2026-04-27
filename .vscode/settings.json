@@ -3,5 +3,6 @@
   "files.insertFinalNewline": true,
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
-  "yaml.format.enable": true
+  "yaml.format.enable": true,
+  "git.addAICoAuthor": "off"
 }

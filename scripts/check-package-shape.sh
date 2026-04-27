@@ -7,6 +7,8 @@ SCRIPTS_DIR="${PACKAGE_DIR}/scripts"
 required_files=(
   "${PACKAGE_DIR}/package.yaml"
   "${SCRIPTS_DIR}/speak.yaml"
+  "${SCRIPTS_DIR}/speak_test.yaml"
+  "${SCRIPTS_DIR}/speak_test_all.yaml"
   "${SCRIPTS_DIR}/good_morning.yaml"
   "${SCRIPTS_DIR}/current_time.yaml"
   "${SCRIPTS_DIR}/current_date.yaml"
@@ -19,6 +21,8 @@ required_files=(
 
 required_script_ids=(
   "good_morning_speak"
+  "good_morning_speak_test"
+  "good_morning_speak_test_all"
   "good_morning"
   "morning_current_time"
   "morning_current_date"
