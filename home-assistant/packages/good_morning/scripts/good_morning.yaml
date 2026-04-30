@@ -2,16 +2,7 @@ good_morning:
   alias: Good morning
   mode: single
   sequence:
-      # Create this optional "Good Morning Testing Hook" script in the Home Assistant UI and it will be run at this point in the routine.
-      # You can use it to test things like turning off fans or other actions that you want to verify are working.
-      - if:
-        - condition: template
-          value_template: >-
-            {{ states('script.good_morning_testing_hook') not in ['unknown', 'unavailable'] }}
-      then:
-        - action: script.good_morning_testing_hook
-
-    # Check if the set everywhere to volume 5 script exists and is available, and run it if so
+    # Check if the set everywhere to volume 5 script exists and is available, and run it if so.
     - if:
         - condition: template
           value_template: >-
@@ -19,7 +10,16 @@ good_morning:
       then:
         - action: script.set_everywhere_to_volume_5
 
-    # Run the main Good Morning routine scripts
+    # Create this optional "Good Morning Testing Hook" script in the Home Assistant UI and it will be run at this point in the routine.
+    # You can use it to test things like turning off fans or other actions that you want to verify are working.
+    - if:
+        - condition: template
+          value_template: >-
+            {{ states('script.good_morning_testing_hook') not in ['unknown', 'unavailable'] }}
+      then:
+        - action: script.good_morning_testing_hook
+
+    # Run the main Good Morning routine scripts.
     - action: script.morning_current_time
     - action: script.morning_allergy_report
     - action: script.morning_air_quality_report
@@ -27,7 +27,7 @@ good_morning:
     - action: script.morning_temperature_report
     - action: script.morning_current_date
 
-    # Check if the turn on TV script exists and is available, and run it if so
+    # Check if the turn on TV script exists and is available, and run it if so.
     - if:
         - condition: template
           value_template: >-
