@@ -1,0 +1,7 @@
+good_morning_tts_target:
+  name: Good Morning TTS Target
+  icon: mdi:speaker
+  options:
+    - media_player.desk_echo_pop
+    - media_player.bedroom_echo_dot
+    - last_called
