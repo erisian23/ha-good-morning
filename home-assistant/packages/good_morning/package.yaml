@@ -26,6 +26,5 @@ input_select:
       - media_player.desk_echo_pop
       - media_player.bedroom_echo_dot
       - last_called
-    initial: media_player.desk_echo_pop
 
 script: !include_dir_merge_named scripts
