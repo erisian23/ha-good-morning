@@ -1,8 +1,16 @@
 {
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "editor.tabSize": 2,
   "editor.insertSpaces": true,
-  "yaml.format.enable": true,
-  "git.addAICoAuthor": "off"
+  "editor.tabSize": 2,
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "git.addAICoAuthor": "off",
+  "yaml.customTags": [
+    "!include scalar",
+    "!include_dir_list scalar",
+    "!include_dir_named scalar",
+    "!include_dir_merge_list scalar",
+    "!include_dir_merge_named scalar",
+    "!secret scalar"
+  ],
+  "yaml.format.enable": true
 }
