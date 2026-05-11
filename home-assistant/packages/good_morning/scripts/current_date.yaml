@@ -13,7 +13,7 @@ morning_current_date:
             else 'rd' if d % 10 == 3
             else 'th'
           %}
-          Today is {{ now().strftime('%A') }}, {{ now().strftime('%B') }} {{ d }}{{ suffix }}, {{ now().year }}.
+          It's {{ now().strftime('%A') }}, {{ now().strftime('%B') }} {{ d }}{{ suffix }}.
 
     - action: script.good_morning_speak
       data:
