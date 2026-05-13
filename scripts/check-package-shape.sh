@@ -7,7 +7,7 @@ SCRIPTS_DIR="${PACKAGE_DIR}/scripts"
 
 required_files=(
   "${PACKAGE_DIR}/package.yaml"
-  "${INPUT_SELECTS_DIR}/good_morning_tts_target.yaml"
+  "${INPUT_SELECTS_DIR}/tts_target.yaml"
   "${SCRIPTS_DIR}/speak.yaml"
   "${SCRIPTS_DIR}/speak_test.yaml"
   "${SCRIPTS_DIR}/speak_test_all.yaml"
@@ -22,7 +22,7 @@ required_files=(
 )
 
 required_input_select_files_and_ids=(
-  "${INPUT_SELECTS_DIR}/good_morning_tts_target.yaml:good_morning_tts_target"
+  "${INPUT_SELECTS_DIR}/tts_target.yaml:good_morning_tts_target"
 )
 
 required_script_files_and_ids=(
