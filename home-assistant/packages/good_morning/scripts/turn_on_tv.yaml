@@ -24,4 +24,4 @@ morning_turn_on_tv:
       target:
         device_id: ed0cafb7d9ed1ad082e5aa1dd3385d79
       data:
-        command: am start -n com.wbd.stream/com.wbd.beam.BeamActivity
+        command: monkey -p com.nuvio.app -c android.intent.category.LEANBACK_LAUNCHER 1
