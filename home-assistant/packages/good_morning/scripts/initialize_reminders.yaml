@@ -3,20 +3,13 @@ morning_initialize_reminders:
   mode: single
   icon: mdi:calendar-clock
   sequence:
-    # The reminder system is optional. If its Day Start Anchor helper does not
-    # exist, there is nothing to initialize and this script exits successfully.
+    # Initialize the optional reminder system if it is installed.
     - if:
         - condition: template
           value_template: >-
             {{
-              states('input_datetime.day_start_anchor')
+              states('script.reminders_initialize')
               not in ['unknown', 'unavailable']
             }}
       then:
-        - action: input_datetime.set_datetime
-          target:
-            entity_id: input_datetime.day_start_anchor
-          data:
-            datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
-
-        - action: script.schedule_wake_relative_reminders
+        - action: script.reminders_initialize
