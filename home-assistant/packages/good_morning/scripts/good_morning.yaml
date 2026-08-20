@@ -2,6 +2,10 @@ good_morning:
   alias: Good morning
   mode: single
   sequence:
+    # Tell the reminder system that the day has started.
+    - action: script.morning_initialize_reminders
+      continue_on_error: true
+
     # Check if the set everywhere to volume 5 script exists and is available, and run it if so.
     - if:
         - condition: template
