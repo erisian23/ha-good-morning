@@ -1,27 +1,44 @@
 morning_turn_on_tv:
   alias: Morning - Turn On TV
   mode: single
-  description: ""
+  description: >-
+    Wake the onn 4K Plus, launch Nuvio, and normalize the HDMI ARC soundbar volume to 30.
   sequence:
-    - action: remote.turn_on
-      metadata: {}
+    - alias: Wake onn 4K Plus
+      action: remote.turn_on
       target:
         entity_id: remote.onn_4k_plus
       data: {}
-    - delay:
-        hours: 0
-        minutes: 0
-        seconds: 1
-        milliseconds: 0
-    - action: media_player.volume_set
-      metadata: {}
-      data:
-        volume_level: 0.2
+
+    - alias: Give the TV, soundbar, and streamer time to wake up and synchronize
+      delay:
+        seconds: 10
+
+    - alias: Launch Nuvio
+      action: remote.turn_on
       target:
-        entity_id: media_player.living_room_tv
-    - action: androidtv.adb_command
-      metadata: {}
-      target:
-        device_id: ed0cafb7d9ed1ad082e5aa1dd3385d79
+        entity_id: remote.onn_4k_plus
       data:
-        command: monkey -p com.nuvio.app -c android.intent.category.LEANBACK_LAUNCHER 1
+        activity: "nuvio://"
+
+    - alias: Normalize soundbar volume to 0
+      repeat:
+        count: 50
+        sequence:
+          - action: remote.send_command
+            target:
+              entity_id: remote.onn_4k_plus
+            data:
+              command: VOLUME_DOWN
+              delay_secs: 0.4
+
+    - alias: Raise soundbar volume to 30
+      repeat:
+        count: 15
+        sequence:
+          - action: remote.send_command
+            target:
+              entity_id: remote.onn_4k_plus
+            data:
+              command: VOLUME_UP
+              delay_secs: 0.4
